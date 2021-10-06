@@ -5,7 +5,7 @@ kubectl create ns gitlab
 
 
 
-helm -n gitlab upgrade --install gitlab --timeout 600s --set global.hosts.domain=example.com .
+helm -n gitlab upgrade --install gitlab --timeout 600s --set global.hosts.domain=example.com --set global.hosts.https=false --set global.ingress.tls.enabled=false --set nginx-ingress.enabled=false .
 
 https://docs.gitlab.com/charts/installation/deployment.html
 ```

@@ -68,8 +68,8 @@ global:
     provider: nginx
     annotations: {}
     enabled: true
-    tls: {}
-    #   enabled: true
+    tls:
+      enabled: true
     #   secretName:
     path: /
     pathType: Prefix
