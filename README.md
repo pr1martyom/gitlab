@@ -44,6 +44,12 @@ https://docs.gitlab.com/charts/installation/deployment.html
 
 kubectl -n gitlab edit ingress 
 
+delete from ingress 
+```
+      kubernetes.io/ingress.class: gitlab-nginx
+      kubernetes.io/ingress.provider: nginx
+```
+
 add  ingressClassName: nginx-controller
 
 example:
