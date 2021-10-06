@@ -1,13 +1,28 @@
 # Install gitlab
 
 ```
-kubectl create ns gitlab 
 
+git clone https://github.com/pr1martyom/gitlab.git gitlab
+
+kubectl create ns gitlab 
 
 
 helm -n gitlab upgrade --install gitlab --timeout 600s --set global.hosts.domain=example.com --set global.hosts.https=false --set global.ingress.tls.enabled=false --set nginx-ingress.enabled=false .
 
 https://docs.gitlab.com/charts/installation/deployment.html
+```
+
+# Change ingress in kubectl
+
+kubectl -n gitlab edit ingress 
+
+add  ingressClassName: nginx-controller
+
+example:
+```
+spec:
+  ingressClassName: nginx-controller
+  rules:
 ```
 
 # Docker gitlab runners
