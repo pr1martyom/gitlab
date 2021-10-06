@@ -1,13 +1,41 @@
 # Install gitlab
 
 ```
+helm repo add gitlab https://charts.gitlab.io/
 
-git clone https://github.com/pr1martyom/gitlab.git gitlab
+helm repo update
+
+helm pull gitlab/gitlab --untar
+
+cd gitlab
 
 kubectl create ns gitlab 
 
+vi values.yaml
 
-helm -n gitlab upgrade --install gitlab --timeout 600s --set certmanager-issuer.email=me@example.com  --set global.hosts.domain=example.com --set global.hosts.https=false --set global.ingress.tls.enabled=false --set nginx-ingress.enabled=false .
+find and change:
+
+---
+hosts:
+  domain: example.com
+  hostSuffix:
+  https: false
+---
+
+ingress:
+  configureCertmanager: true
+  provider: nginx
+  annotations: {}
+  enabled: true
+  tls:
+  enabled: false
+---
+
+nginx-ingress:
+  enabled: false
+---
+
+helm -n gitlab upgrade --install gitlab --timeout 600s --set certmanager-issuer.email=me@example.com  --set global.hosts.domain=example.com .
 
 https://docs.gitlab.com/charts/installation/deployment.html
 ```
