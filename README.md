@@ -28,7 +28,7 @@ ingress:
   annotations: {}
   enabled: true
   tls:
-  enabled: false
+    enabled: false
 ---
 
 nginx-ingress:
