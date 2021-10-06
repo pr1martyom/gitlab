@@ -3,7 +3,9 @@
 ```
 kubectl create ns gitlab 
 
-helm -n gitlab upgrade --install   --timeout 600s --set global.hosts.domain=example.com .
+
+
+helm -n gitlab upgrade --install gitlab --timeout 600s --set global.hosts.domain=example.com .
 
 https://docs.gitlab.com/charts/installation/deployment.html
 ```

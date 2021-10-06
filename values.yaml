@@ -37,7 +37,7 @@ global:
     labels: {}
 
   ## https://docs.gitlab.com/charts/installation/deployment#deploy-the-community-edition
-  edition: ce
+  edition: ee
 
   ## https://docs.gitlab.com/charts/charts/globals#gitlab-version
   # gitlabVersion:
@@ -51,7 +51,7 @@ global:
   hosts:
     domain: example.com
     hostSuffix:
-    https: false
+    https: true
     externalIP:
     ssh: ~
     gitlab: {}
@@ -68,8 +68,8 @@ global:
     provider: nginx
     annotations: {}
     enabled: true
-    tls: 
-      enabled: false
+    tls: {}
+    #   enabled: true
     #   secretName:
     path: /
     pathType: Prefix
@@ -706,8 +706,8 @@ certmanager:
 ## https://docs.gitlab.com/charts/architecture/decisions#nginx-ingress
 ## Installation & configuration of charts/ingress-nginx:
 nginx-ingress:
-  enabled: false
-  tcpExternalConfig: "false"
+  enabled: true
+  tcpExternalConfig: "true"
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
