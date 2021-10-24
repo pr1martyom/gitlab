@@ -108,8 +108,101 @@ check_interval = 0
     shm_size = 0
 ```
 
-# Kubernetes gitlab runner
+# Kubernetes gitlab runner example 1
 ```
+link:
+https://adambcomer.com/blog/install-gitlab-runner-kubernetes/
+          
+# gitlab-runner-service-account.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-admin
+  namespace: gitlab-runner
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: gitlab-runner
+  name: gitlab-admin
+rules:
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitlab-admin
+  namespace: gitlab-runner
+subjects:
+  - kind: ServiceAccount
+    name: gitlab-admin
+    namespace: gitlab-runner
+roleRef:
+  kind: Role
+  name: gitlab-admin
+  apiGroup: rbac.authorization.k8s.io
+  
+  
+# gitlab-runner-config.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-runner-config
+  namespace: gitlab-runner
+data:
+  config.toml: |-
+    concurrent = 4
+    [[runners]]
+      name = "Kubernetes Demo Runner"
+      url = "https://gitlab.com/ci"
+      token = "[TOKEN]"
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "gitlab-runner"
+        poll_timeout = 600
+        cpu_request = "1"
+        service_cpu_request = "200m"
+        
+# cat runner.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner
+  namespace: runner
+  labels:
+    app: runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: runner
+  template:
+    metadata:
+      labels:
+        app: runner
+    spec:
+      serviceAccountName: runner
+      containers:
+        - name: runner
+          image: "gitlab/gitlab-runner:alpine-v13.2.4"
+          volumeMounts:
+          - mountPath: /etc/gitlab-runner/config.toml
+            name: config
+            subPath: config.toml
+      volumes:
+      - name: config
+        configMap:
+          name: runner
+
+```
+
+# Kubernetes gitlab runner example 2
+
 helm repo add gitlab https://charts.gitlab.io
 
 kubectl create namespace gitlab
